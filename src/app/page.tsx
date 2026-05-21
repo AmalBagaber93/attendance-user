@@ -1,5 +1,7 @@
-import { fetchLandingConfig } from "../lib/landingConfig";
 import LandingScreen from "../components/landing-screen/landing-screen";
+import { fetchLandingConfig } from "../lib/landingConfig";
+
+
 
 export async function generateMetadata() {
   return {
@@ -7,11 +9,11 @@ export async function generateMetadata() {
   };
 }
 
-export default async function Page() {
+export default async function LandingPage() {
   const config = await fetchLandingConfig();
   return (
     <LandingScreen config={config} />
-  );
+  )
 }
 
 
