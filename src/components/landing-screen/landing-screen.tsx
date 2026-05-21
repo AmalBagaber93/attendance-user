@@ -1,8 +1,8 @@
 "use client"
 import { LandingPageConfig } from "@/src/lib/landingConfig";
-import About from "./components/About";
+import Sponsors from "./components/Sponsors";
 import CtaBanner from "./components/CtaBanner";
-import Features from "./components/Features";
+import Speakers from "./components/Speakers";
 import Footer from "./components/Footer";
 import Hero from "./components/Hero";
 import Navbar from "./components/Navbar";
@@ -34,11 +34,12 @@ export default function LandingScreen({ config }: landingScreenProps) {
 
             <main>
                 <Hero config={config} />
-                <Features config={config} />
-                <About config={config} />
+                <Speakers config={config} />
+                <Sponsors config={config} />
                 <Schedule config={config} />
                 <Testimonials config={config} />
-                <CtaBanner config={config} />
+                {/* <CtaBanner config={config} /> */}
+
             </main>
 
             <Footer config={config} />

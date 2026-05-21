@@ -37,6 +37,24 @@ export interface FeatureCard {
   description: string;
 }
 
+export interface Speaker {
+  id: string;
+  name: string;
+  role?: string;
+  company?: string;
+  bio?: string;
+  topic?: string;
+  avatar?: string;
+}
+
+export interface Sponsor {
+  id: string;
+  name: string;
+  logo?: string;
+  tier?: "platinum" | "gold" | "silver" | "bronze";
+  website?: string;
+}
+
 export interface ScheduleItem {
   id: string;
   dayLabel?: string;
@@ -116,6 +134,8 @@ export interface LandingPageConfig {
   nav?: NavConfig;
   hero?: HeroSection;
   features?: FeatureCard[];
+  speakers?: Speaker[];
+  sponsors?: Sponsor[];
   about?: AboutSection;
   schedule?: ScheduleItem[];
   testimonials?: Testimonial[];
@@ -136,9 +156,9 @@ export const defaultConfig: LandingPageConfig = {
   nav: {
     links: [
       { label: 'Schedule', href: '#schedule' },
-      { label: 'Features', href: '#features' },
-      { label: 'About', href: '#about' },
-      { label: 'Register', href: '#registration' },
+      { label: 'Speakers', href: '#speakers' },
+      { label: 'Sponsors', href: '#sponsors' },
+      { label: 'Register', href: '/register' },
     ],
     ctaText: 'Sign In',
     ctaLink: '#',
@@ -150,7 +170,7 @@ export const defaultConfig: LandingPageConfig = {
     subtitle:
       'The premier 48-hour high-stakes hackathon for developers, designers, and visionaries building with next-gen AI and spatial computing.',
     ctaText: 'Register Now',
-    ctaLink: '#registration',
+    ctaLink: '/register',
     secondaryCtaText: 'Learn More',
     secondaryCtaLink: '#features',
     image:
@@ -159,49 +179,67 @@ export const defaultConfig: LandingPageConfig = {
       'A sleek, modern innovation hub interior during a high-tech event.',
     location: 'Tech Innovation Hub, San Francisco',
   },
-  features: [
+  speakers: [
     {
       id: '1',
-      icon: 'bolt',
-      title: '48-Hour Sprint',
-      description:
-        'Non-stop hacking sessions with mentors on standby to guide you through your toughest challenges.',
+      name: 'Dr. Priya Nair',
+      role: 'VP of AI Research',
+      company: 'OpenFrontier',
+      bio: 'Pioneer in large-scale language models and responsible AI deployment.',
+      topic: 'The Next Frontier of Generative AI',
     },
     {
       id: '2',
-      icon: 'groups',
-      title: 'Expert Mentors',
-      description:
-        "Get direct access to industry leaders and engineers from the world's top technology companies.",
+      name: 'James Okafor',
+      role: 'Co-founder & CEO',
+      company: 'SpatialOS',
+      bio: 'Built the infrastructure powering spatial computing for 50M+ users worldwide.',
+      topic: 'Spatial Computing in Practice',
     },
     {
       id: '3',
-      icon: 'emoji_events',
-      title: '$50K Prize Pool',
-      description:
-        'Compete for a massive prize fund distributed across multiple winning categories.',
+      name: 'Lena Hoffman',
+      role: 'Principal Engineer',
+      company: 'DeepSystems',
+      bio: 'Led the team behind award-winning real-time inference at the edge.',
+      topic: 'Edge AI Architecture',
     },
     {
       id: '4',
-      icon: 'hub',
-      title: 'Networking',
-      description:
-        'Connect with thousands of like-minded builders, investors, and innovators in one place.',
+      name: 'Carlos Mendez',
+      role: 'General Partner',
+      company: 'Horizon Ventures',
+      bio: 'Early investor in 12 unicorn startups. Passionate about founder-led innovation.',
+      topic: 'From Hackathon to Series A',
     },
     {
       id: '5',
-      icon: 'psychology',
-      title: 'AI & Spatial Tech',
-      description:
-        'Build at the cutting edge with access to the latest AI APIs and spatial computing tools.',
+      name: 'Yuki Tanaka',
+      role: 'Head of Developer Relations',
+      company: 'Anthropic',
+      bio: 'Helps thousands of developers build with cutting-edge AI tools and APIs.',
+      topic: 'Building Responsibly with LLMs',
     },
     {
       id: '6',
-      icon: 'rocket_launch',
-      title: 'Launchpad',
-      description:
-        'Many past participants have gone on to raise funding and launch successful startups.',
+      name: 'Amara Diallo',
+      role: 'CTO',
+      company: 'NeuroLink Labs',
+      bio: 'Expert in brain-computer interfaces and next-generation human-machine interaction.',
+      topic: 'HCI Beyond the Screen',
     },
+  ],
+  sponsors: [
+    { id: '1', name: 'NeuralCore', tier: 'platinum' },
+    { id: '2', name: 'QuantumLeap', tier: 'platinum' },
+    { id: '3', name: 'SynthAI', tier: 'gold' },
+    { id: '4', name: 'CloudNexus', tier: 'gold' },
+    { id: '5', name: 'DataForge', tier: 'gold' },
+    { id: '6', name: 'SparkLabs', tier: 'silver' },
+    { id: '7', name: 'DevBridge', tier: 'silver' },
+    { id: '8', name: 'OpenStack', tier: 'bronze' },
+    { id: '9', name: 'ByteWave', tier: 'bronze' },
+    { id: '10', name: 'CodePath', tier: 'bronze' },
   ],
   about: {
     title: 'Where Builders Become Founders',
@@ -328,6 +366,14 @@ export function mergeWithDefaults(
     about: { ...defaultConfig.about, ...remote.about },
     cta: { ...defaultConfig.cta, ...remote.cta },
     footer: { ...defaultConfig.footer, ...remote.footer },
+    speakers:
+      remote.speakers && remote.speakers.length > 0
+        ? remote.speakers
+        : defaultConfig.speakers,
+    sponsors:
+      remote.sponsors && remote.sponsors.length > 0
+        ? remote.sponsors
+        : defaultConfig.sponsors,
     features:
       remote.features && remote.features.length > 0
         ? remote.features

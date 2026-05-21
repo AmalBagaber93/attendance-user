@@ -1,4 +1,5 @@
-import type { LandingPageConfig } from "../../lib/landingConfig";
+;
+import { LandingPageConfig } from "@/src/lib/landingConfig";
 import MobileMenu from "./MobileMenu";
 
 interface NavbarProps {
