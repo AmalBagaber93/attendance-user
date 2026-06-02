@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import type { LandingPageConfig } from "../../lib/landingConfig";
 import FormField from "./components/FormField";
@@ -24,9 +25,6 @@ const TRACKS = [
   { value: "security", label: "Cybersecurity Operations" },
 ];
 
-const TRACK_LABEL: Record<string, string> = Object.fromEntries(
-  TRACKS.map((t) => [t.value, t.label])
-);
 
 export default function Registration({ config }: RegistrationProps) {
   const {
@@ -44,10 +42,25 @@ export default function Registration({ config }: RegistrationProps) {
   });
 
   const onSubmit = async (_data: RegistrationFormValues) => {
-    // Replace with real API call, e.g.:
-    // await fetch('/api/register', { method: 'POST', body: JSON.stringify(data) });
+    ;
     await new Promise((resolve) => setTimeout(resolve, 1000));
   };
+
+  if (isSubmitSuccessful) {
+    return (
+      <section
+        id="registration"
+        aria-labelledby="registration-heading"
+        className="flex-grow flex items-center justify-center py-24 px-6 bg-surface"
+      >
+        <EventPass
+          name={getValues("fullName")}
+          track={getValues("track")}
+          siteTitle={config.siteTitle}
+        />
+      </section>
+    );
+  }
 
   return (
     <section
@@ -58,83 +71,77 @@ export default function Registration({ config }: RegistrationProps) {
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-xl">
         {/* Left: form */}
         <div className="lg:col-span-7 space-y-xl">
-
-          {isSubmitSuccessful ? (
-            <SuccessCard
-              name={getValues("fullName")}
-              track={getValues("track")}
-              siteTitle={config.siteTitle}
-            />
-          ) : (
-            <form
-              onSubmit={handleSubmit(onSubmit)}
-              noValidate
-              className="space-y-lg bg-surface-container-lowest p-lg rounded-xl border border-outline-variant shadow-sm"
-            >
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-lg">
-                <FormField
-                  label="Full Name"
-                  type="text"
-                  placeholder="Enter your full name"
-                  autoComplete="name"
-                  error={errors.fullName}
-                  {...register("fullName", {
-                    required: "Full name is required",
-                    minLength: {
-                      value: 2,
-                      message: "Name must be at least 2 characters",
-                    },
-                  })}
-                />
-                <FormField
-                  label="Email Address"
-                  type="email"
-                  placeholder="name@company.com"
-                  autoComplete="email"
-                  error={errors.email}
-                  {...register("email", {
-                    required: "Email address is required",
-                    pattern: {
-                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                      message: "Enter a valid email address",
-                    },
-                  })}
-                />
-              </div>
-
+          <h1 className="font-h1 text-h1 text-on-surface mb-sm">Secure your spot</h1>
+          <p className="font-body-md text-body-md text-on-surface-variant">Join the most influential minds in technology. Complete your registration to access technical tracks, networking events, and developer workshops.</p>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            noValidate
+            className="space-y-lg bg-surface-container-lowest p-lg rounded-xl border border-outline-variant shadow-sm"
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-lg">
               <FormField
-                label="University / Company"
+                label="Full Name"
                 type="text"
-                placeholder="Where do you innovate?"
-                autoComplete="organization"
-                error={errors.organization}
-                {...register("organization", {
-                  required: "University or company is required",
+                placeholder="Enter your full name"
+                autoComplete="name"
+                error={errors.fullName}
+                {...register("fullName", {
+                  required: "Full name is required",
+                  minLength: {
+                    value: 2,
+                    message: "Name must be at least 2 characters",
+                  },
                 })}
               />
-
-              <FormSelect
-                label="Track Selection"
-                placeholder="Select a technical track"
-                options={TRACKS}
-                error={errors.track}
-                {...register("track", {
-                  required: "Please select a track",
+              <FormField
+                label="Email Address"
+                type="email"
+                placeholder="name@company.com"
+                autoComplete="email"
+                error={errors.email}
+                {...register("email", {
+                  required: "Email address is required",
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: "Enter a valid email address",
+                  },
                 })}
               />
+            </div>
 
-              <div className="pt-md">
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full bg-primary text-on-primary font-h3 text-h3 py-md rounded-lg hover:opacity-90 active:scale-[0.98] transition-all shadow-md disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100"
-                >
-                  {isSubmitting ? "Submitting…" : "Complete Registration"}
-                </button>
-              </div>
-            </form>
-          )}
+            <FormField
+              label="University / Company"
+              type="text"
+              placeholder="Where do you innovate?"
+              autoComplete="organization"
+              error={errors.organization}
+              {...register("organization", {
+                required: "University or company is required",
+              })}
+            />
+
+            <FormSelect
+              label="Track Selection"
+              placeholder="Select a technical track"
+              options={TRACKS}
+              error={errors.track}
+              {...register("track", {
+                required: "Please select a track",
+              })}
+            />
+
+            <div className="pt-md">
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-primary text-on-primary font-h3 text-h3 py-md rounded-lg hover:opacity-90 active:scale-[0.98] transition-all shadow-md disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100"
+              >
+                {isSubmitting ? "Submitting…" : "Complete Registration"}
+              </button>
+            </div>
+          </form>
         </div>
+
 
         {/* Right: event info card */}
         <div className="lg:col-span-5">
@@ -224,45 +231,126 @@ export default function Registration({ config }: RegistrationProps) {
   );
 }
 
-interface SuccessCardProps {
+interface EventPassProps {
   name: string;
   track: string;
   siteTitle?: string;
 }
 
-function SuccessCard({ name, track, siteTitle = "InnovateX" }: SuccessCardProps) {
+function EventPass({ name, siteTitle = "InnovateX" }: EventPassProps) {
+  const [passId] = useState(() => `#HX-2024-${Math.floor(100 + Math.random() * 900)}`);
+  const [copied, setCopied] = useState(false);
+
+  async function handleShare() {
+    const shareData = {
+      title: `${siteTitle} 2024 — Digital Event Pass`,
+      text: `${name} is attending ${siteTitle} 2024! Pass ID: ${passId}`,
+      url: window.location.href,
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch {
+        // user cancelled — do nothing
+      }
+    } else {
+      await navigator.clipboard.writeText(`${shareData.text}\n${shareData.url}`);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  }
+
   return (
-    <div className="bg-secondary-container/20 border-2 border-secondary rounded-xl p-lg space-y-md">
-      <div className="flex items-center gap-md text-secondary">
-        <span
-          className="material-symbols-outlined text-h2"
-          style={{ fontVariationSettings: "'FILL' 1" }}
-          aria-hidden="true"
-        >
-          check_circle
-        </span>
-        <h2 className="font-h2 text-h2">Registration Confirmed</h2>
+    <div className="w-full max-w-[440px] flex flex-col gap-lg">
+      {/* Header */}
+      <div className="text-center space-y-xs">
+        <h1 className="font-h1 text-h1 text-on-surface">Digital Event Pass</h1>
+        <p className="font-body-sm text-body-sm text-on-surface-variant">
+          Your entry key for {siteTitle} 2024
+        </p>
       </div>
-      <div className="bg-surface-container-lowest border border-outline-variant p-lg rounded-lg flex flex-col md:flex-row items-center gap-lg">
-        <div className="bg-white p-sm border border-outline-variant rounded shadow-inner shrink-0">
-          <div className="w-32 h-32 bg-slate-100 flex items-center justify-center text-on-surface-variant">
+
+      {/* Pass card */}
+      <div className="bg-surface-container-lowest border border-outline-variant rounded-[24px] shadow-lg overflow-hidden flex flex-col">
+        {/* Branding header */}
+        <div className="bg-primary px-lg py-md flex justify-between items-center">
+          <span className="font-h3 text-on-primary font-bold tracking-tight">{siteTitle}</span>
+          <span className="px-sm py-xs bg-secondary-container text-on-secondary-container rounded-full text-label-md font-bold flex items-center gap-xs">
             <span
-              className="material-symbols-outlined text-[64px]"
-              aria-label="QR code placeholder"
+              className="material-symbols-outlined text-[14px]"
+              style={{ fontVariationSettings: "'FILL' 1" }}
+              aria-hidden="true"
             >
-              qr_code_2
+              verified
             </span>
+            Verified
+          </span>
+        </div>
+
+        {/* Pass content */}
+        <div className="p-lg flex flex-col items-center text-center gap-lg">
+          {/* Attendee info */}
+          <div className="space-y-xs">
+            <p className="font-h2 text-[32px] leading-tight text-on-surface font-bold">{name}</p>
+            <p className="font-label-md text-primary font-bold tracking-widest uppercase">
+              ID: {passId}
+            </p>
+          </div>
+
+          {/* QR code */}
+          <div className="relative group">
+            <div className="p-md bg-white border border-outline-variant rounded-2xl shadow-sm transition-transform duration-300 group-hover:scale-[1.02]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuB27i8mF-KuoS7eHMga7aJ5wQrQakvDNReQXXz7GFKHKzG96Y5kzgaYKmRzwdPZJNOLU-2ZKwaHKi6QPmnAcYV2WKAgq2ITsLS3cS3DkzdcExFoiUzRwZnBQl83OPAuaCk7KzuHAMq6QrTKlFJrz5o6w14fkhmLRb0h1bsHxGlETwyHBQWKjZJ8bHq0msrxxzeBRJdwJhRZfOGzs4Igqvjm3s9W0x3eoSsnMhkNZHazQ1Hoy2Pktx1XMLUvO_59G9a3rWaxCOs6hIE"
+                alt={`QR Code for ${name}`}
+                className="w-56 h-56 block mix-blend-multiply"
+              />
+            </div>
+          </div>
+
+          {/* Scan instruction */}
+          <div className="w-full py-sm px-md bg-surface-container-low rounded-xl border border-outline-variant/30">
+            <p className="font-body-sm text-body-sm text-on-surface-variant flex items-center justify-center gap-xs">
+              <span className="material-symbols-outlined text-[18px] text-primary" aria-hidden="true">
+                info
+              </span>
+              Scan at Gate 4 • 08:00 AM – 09:30 AM
+            </p>
           </div>
         </div>
-        <div className="space-y-xs text-center md:text-left">
-          <p className="font-label-caps text-label-caps text-secondary uppercase tracking-widest">
-            Digital Ticket
-          </p>
-          <h3 className="font-h3 text-h3 text-on-surface">{name}</h3>
-          <p className="font-body-sm text-body-sm text-on-surface-variant">
-            {siteTitle} • {TRACK_LABEL[track] ?? "Participant"}
-          </p>
+      </div>
+
+      {/* Action buttons */}
+      <div className="flex flex-col gap-sm">
+        <button className="w-full py-md bg-inverse-surface text-inverse-on-surface font-label-md text-label-md rounded-xl flex items-center justify-center gap-sm active:scale-[0.98] transition-all hover:bg-on-surface shadow-sm">
+          <span className="material-symbols-outlined" aria-hidden="true">add_to_home_screen</span>
+          Save to Apple Wallet
+        </button>
+        <div className="grid grid-cols-2 gap-sm">
+          <button
+            onClick={handleShare}
+            className="py-md border border-outline-variant text-on-surface-variant font-label-md text-label-md rounded-xl flex items-center justify-center gap-sm hover:bg-surface-variant/30 transition-colors"
+          >
+            <span className="material-symbols-outlined text-[20px]" aria-hidden="true">
+              {copied ? "check" : "share"}
+            </span>
+            {copied ? "Copied!" : "Share"}
+          </button>
+          <button className="py-md border border-outline-variant text-on-surface-variant font-label-md text-label-md rounded-xl flex items-center justify-center gap-sm hover:bg-surface-variant/30 transition-colors">
+            <span className="material-symbols-outlined text-[20px]" aria-hidden="true">download</span>
+            Download
+          </button>
         </div>
+      </div>
+
+      {/* Secondary actions */}
+      <div className="flex justify-center items-center gap-lg pt-md">
+        <button className="flex items-center gap-xs font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors">
+          <span className="material-symbols-outlined text-[18px]" aria-hidden="true">help</span>
+          Support
+        </button>
       </div>
     </div>
   );
